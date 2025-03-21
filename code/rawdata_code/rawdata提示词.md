@@ -261,6 +261,7 @@ data是存放数据的文件夹，文件夹下data1和data2是批次1和批次2.
 "
 BVDSS1
 BVDSS2
+BV2-BV1
 DELTABV
 IDSS1
 VTH

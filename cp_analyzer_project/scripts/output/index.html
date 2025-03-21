@@ -3,41 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>晶圆厂CP测试数据分析报告</title>
+    <title>晶圆厂CP测试数据分析报告 - 批次索引</title>
     <link rel="stylesheet" href="static/css/style.css">
+    <style>
+        .batch-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .batch-card {
+            flex: 1 1 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .batch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .batch-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #0066cc;
+        }
+        
+        .batch-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .batch-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .batch-link {
+            display: block;
+            text-align: center;
+            background-color: #0066cc;
+            color: white;
+            padding: 8px 0;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .batch-link:hover {
+            background-color: #0055aa;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>晶圆厂CP测试数据分析报告</h1>
+        <h2>批次索引</h2>
         
-        <h2>参数列表</h2>
-        
-        <ul class="param-list">
+        <div class="batch-container">
             
-            <li><a href="BVDSS1_report.html">BVDSS1</a></li>
+            <div class="batch-card">
+                <div class="batch-title">C141321.02-CPTSTE12-250213-185303@CP_014</div>
+                <div class="batch-info">
+                    批次号: 未知<br>
+                    处理时间: 2025-03-21 18:03:37
+                </div>
+                <div class="batch-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">晶圆数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">记录数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">参数数</div>
+                    </div>
+                </div>
+                <a href="C141321.02-CPTSTE12-250213-185303@CP_014/index.html" class="batch-link">查看详情</a>
+            </div>
             
-            <li><a href="BVDSS2_report.html">BVDSS2</a></li>
+            <div class="batch-card">
+                <div class="batch-title">FA53-5465-305A-250303@203_001</div>
+                <div class="batch-info">
+                    批次号: 未知<br>
+                    处理时间: 2025-03-21 18:03:54
+                </div>
+                <div class="batch-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">晶圆数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">记录数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">11</div>
+                        <div class="stat-label">参数数</div>
+                    </div>
+                </div>
+                <a href="FA53-5465-305A-250303@203_001/index.html" class="batch-link">查看详情</a>
+            </div>
             
-            <li><a href="DELTABV_report.html">DELTABV</a></li>
+            <div class="batch-card">
+                <div class="batch-title">NCEHSM650PBA_C127251.00@CP</div>
+                <div class="batch-info">
+                    批次号: 未知<br>
+                    处理时间: 2025-03-21 18:04:07
+                </div>
+                <div class="batch-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">晶圆数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">记录数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">11</div>
+                        <div class="stat-label">参数数</div>
+                    </div>
+                </div>
+                <a href="NCEHSM650PBA_C127251.00@CP/index.html" class="batch-link">查看详情</a>
+            </div>
             
-            <li><a href="IDSS1_report.html">IDSS1</a></li>
+            <div class="batch-card">
+                <div class="batch-title">NCEHSM700TCB_C146419.00@CP</div>
+                <div class="batch-info">
+                    批次号: 未知<br>
+                    处理时间: 2025-03-21 18:04:22
+                </div>
+                <div class="batch-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">晶圆数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">记录数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">11</div>
+                        <div class="stat-label">参数数</div>
+                    </div>
+                </div>
+                <a href="NCEHSM700TCB_C146419.00@CP/index.html" class="batch-link">查看详情</a>
+            </div>
             
-            <li><a href="VTH_report.html">VTH</a></li>
+            <div class="batch-card">
+                <div class="batch-title">NCESF600RAA_FA51-3283@203</div>
+                <div class="batch-info">
+                    批次号: 未知<br>
+                    处理时间: 2025-03-21 18:04:39
+                </div>
+                <div class="batch-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">晶圆数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">记录数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">11</div>
+                        <div class="stat-label">参数数</div>
+                    </div>
+                </div>
+                <a href="NCESF600RAA_FA51-3283@203/index.html" class="batch-link">查看详情</a>
+            </div>
             
-            <li><a href="RDSON1_report.html">RDSON1</a></li>
+            <div class="batch-card">
+                <div class="batch-title">NCESM650QAA_FA49-2230@203</div>
+                <div class="batch-info">
+                    批次号: 未知<br>
+                    处理时间: 2025-03-21 18:04:46
+                </div>
+                <div class="batch-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">晶圆数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">记录数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">11</div>
+                        <div class="stat-label">参数数</div>
+                    </div>
+                </div>
+                <a href="NCESM650QAA_FA49-2230@203/index.html" class="batch-link">查看详情</a>
+            </div>
             
-            <li><a href="VFSDS_report.html">VFSDS</a></li>
-            
-            <li><a href="IGSS2_report.html">IGSS2</a></li>
-            
-            <li><a href="IGSSR2_report.html">IGSSR2</a></li>
-            
-            <li><a href="IDSS2_report.html">IDSS2</a></li>
-            
-        </ul>
+        </div>
         
         <div class="footer">
-            <p>生成时间：2025-03-17 17:39:37</p>
+            <p>生成时间：2025-03-21 18:05:10</p>
             <p>晶圆厂CP测试数据分析工具</p>
         </div>
     </div>
