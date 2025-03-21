@@ -106,9 +106,9 @@ class CPChartGenerator:
         
         # 如果有上下限，则考虑上下限
         if limits.get('upper') is not None:
-            y_max = max(y_max, limits['upper'] * 1.1)
+            y_max = max(y_max, limits['upper'] * 1.1)  # 调整为超过上限10%
         if limits.get('lower') is not None:
-            y_min = min(y_min, limits['lower'] * 0.9)
+            y_min = min(y_min, limits['lower'] * 0.9)  # 调整为低于下限10%
         
         # 确保Y轴范围包含600，用于显示标签
         y_min = min(y_min, 550)  # 确保Y轴下限低于最低标签位置
@@ -334,8 +334,22 @@ class CPChartGenerator:
         # 获取所有晶圆片并排序
         wafers = sorted(stats['by_lot'].keys())
         
-        # 定义nA单位的参数列表
-        na_unit_params = ['IDSS1', 'IGSS2', 'IGSSR2', 'IDSS2']  # 纳安培单位的参数
+        # 定义单位转换参数映射
+        unit_conversions = {
+            # 纳安培 (nA) 单位参数，1nA = 1e-9A
+            "IGSS2": {"factor": 1e9, "unit": "nA"},
+            "IGSSR2": {"factor": 1e9, "unit": "nA"},
+            
+            # 微安培 (uA) 单位参数，1uA = 1e-6A
+            "IDSS1": {"factor": 1e6, "unit": "uA"},
+            "IDSS2": {"factor": 1e6, "unit": "uA"},
+            "IDSS3": {"factor": 1e6, "unit": "uA"},
+            "IGSS1": {"factor": 1e6, "unit": "uA"},
+            "IGSSR1": {"factor": 1e6, "unit": "uA"},
+            
+            # 毫欧姆 (mOHM) 单位参数，1mOHM = 1e-3 ohm
+            "RDSON1": {"factor": 1e3, "unit": "mOHM"}
+        }
         
         # 提取每个晶圆片的平均值和标准差
         avg_values = []
@@ -347,30 +361,53 @@ class CPChartGenerator:
             std_value = wafer_stats['std']
             
             # 根据参数类型选择不同的格式化方式
-            if param in na_unit_params:
-                # 纳安培单位参数，将安培转换为纳安培，1nA=1e-9A
-                mean_value_na = mean_value * 1e9
-                std_value_na = std_value * 1e9
-                # 保留两位小数
-                avg_values.append(f"{mean_value_na:.2f}")
-                std_values.append(f"{std_value_na:.2f}")
-            else:
-                # 其他参数保持原来的精度
-                if abs(mean_value) >= 100:
-                    # 大数值保留1位小数
-                    avg_values.append(f"{mean_value:.1f}")
-                elif abs(mean_value) >= 10:
-                    # 中等数值保留2位小数
-                    avg_values.append(f"{mean_value:.2f}")
-                else:
-                    # 小数值保留3位小数
-                    avg_values.append(f"{mean_value:.3f}")
+            if param in unit_conversions:
+                # 应用单位转换
+                conversion = unit_conversions[param]
+                converted_mean = mean_value * conversion["factor"]
+                converted_std = std_value * conversion["factor"]
                 
-                # 标准差通常需要更多精度
-                if abs(std_value) >= 10:
-                    std_values.append(f"{std_value:.2f}")
+                # 格式化处理
+                if abs(converted_mean) >= 1000:  # 超过4位数字
+                    avg_values.append(f"{converted_mean:.4g}")
                 else:
-                    std_values.append(f"{std_value:.3f}")
+                    if abs(converted_mean) >= 100:
+                        avg_values.append(f"{converted_mean:.1f}")
+                    elif abs(converted_mean) >= 10:
+                        avg_values.append(f"{converted_mean:.2f}")
+                    else:
+                        avg_values.append(f"{converted_mean:.3f}")
+                
+                if abs(converted_std) >= 1000:  # 超过4位数字
+                    std_values.append(f"{converted_std:.4g}")
+                else:
+                    if abs(converted_std) >= 10:
+                        std_values.append(f"{converted_std:.2f}")
+                    else:
+                        std_values.append(f"{converted_std:.3f}")
+            else:
+                # 其他参数根据是否超过4位数字决定格式
+                if abs(mean_value) >= 1000:  # 超过4位数字
+                    # 显示4位有效数字
+                    avg_values.append(f"{mean_value:.4g}")
+                else:
+                    # 不超过4位数字保持原样
+                    if abs(mean_value) >= 100:
+                        avg_values.append(f"{mean_value:.1f}")
+                    elif abs(mean_value) >= 10:
+                        avg_values.append(f"{mean_value:.2f}")
+                    else:
+                        avg_values.append(f"{mean_value:.3f}")
+                
+                # 标准差格式也根据是否超过4位数字决定
+                if abs(std_value) >= 1000:  # 超过4位数字
+                    std_values.append(f"{std_value:.4g}")
+                else:
+                    # 不超过4位数字保持原样
+                    if abs(std_value) >= 10:
+                        std_values.append(f"{std_value:.2f}")
+                    else:
+                        std_values.append(f"{std_value:.3f}")
         
         # 获取批次号
         lot_number = ""
@@ -380,9 +417,9 @@ class CPChartGenerator:
         # 在Plotly中，表格的values参数是按列组织的，每个列表代表一列数据
         columns = []
         
-        # 添加数据列
+        # 添加数据列 - 修改顺序为 WAFER_LOT, average, stddev
         for i in range(len(wafers)):
-            columns.append([avg_values[i], std_values[i], wafers[i]])
+            columns.append([wafers[i], avg_values[i], std_values[i]])
         
         # 添加表格到图表的第二行
         fig.add_trace(
@@ -398,7 +435,7 @@ class CPChartGenerator:
                     align=['center'] * len(wafers),  # 数据列居中
                     font=dict(
                         color=[
-                            ['blue', 'brown', 'black'] for _ in range(len(wafers))  # 数据列颜色
+                            ['black', 'blue', 'brown'] for _ in range(len(wafers))  # 数据列颜色，根据新的顺序调整
                         ],
                         size=11
                     ),
@@ -409,19 +446,12 @@ class CPChartGenerator:
             col=1
         )
         
-        # 添加标签文字，放置在Y轴坐标下方
-        labels = ["Average", "StdDev", "WAFER_LOT"]
-        
+        # 添加标签文字，放置在Y轴坐标下方 - 新的顺序
         # 在Y轴左侧添加标签，精确对齐表格行
-        # 使用表格单元格的高度(25)来计算间隔，表格在paper坐标系中大约占据0.15的高度(从0.11到0.172差约0.062)
-        # 对应3行，每行的高度约为0.031，与原来设置的高度基本一致
-        # 向左移动0.2个单元格距离，每个单元格宽度为0.035，所以向左移动约0.007
-        # 下移2个单元格距离，每个单元格高度约为0.031，所以下移约0.062
-        # 再下移0.2个单元格距离，0.2*0.031=0.0062
         positions = [
-            {"y": 0.104, "label": "Average"},     # 对应再下移0.2个单元格后的位置（原来是0.11）
-            {"y": 0.073, "label": "StdDev"},      # 对应再下移0.2个单元格后的位置（原来是0.079）
-            {"y": 0.042, "label": "WAFER_LOT"}    # 对应再下移0.2个单元格后的位置（原来是0.048）
+            {"y": 0.104, "label": "WAFER_LOT"},  # 第一行
+            {"y": 0.073, "label": "Average"},    # 第二行
+            {"y": 0.042, "label": "StdDev"}      # 第三行
         ]
         
         for pos in positions:

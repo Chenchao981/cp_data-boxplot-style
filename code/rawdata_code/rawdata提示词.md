@@ -300,11 +300,11 @@ IDSS2,
 ----------------数据微调end----------------
 
 ----------------多批次分析功能提示词start----------------
-1. 调整rawdata的文件夹位置，当前位置为“E:\data\rawdata”
-2. “E:\data\rawdata”文件夹下有多个批次的文件夹，每个批次文件夹下有多个log文件。 
+1. 调整rawdata的文件夹位置，当前位置为“D:\data\rawdata”
+2. “D:\data\rawdata”文件夹下有多个批次的文件夹，每个批次文件夹下有多个log文件。 
 3. rawdata文件夹下有多个批次的文件夹，文件夹名称如下
 {
-    E:\data\rawdata\
+    D:\data\rawdata\
     ├─NCEHSM650PBA_C127251.00@CP
     ├─NCEHSM700TCB_C146419.00@CP
     ├─NCESF600RAA_FA51-3283@203
@@ -317,23 +317,45 @@ IDSS2,
 
 ---------------------数据单位调整start---------------------
 增加数据单位调整功能模块
-要求：根据LimitU的单位和数值，确定下面的数值的单位，然后进行单位转换。
-数据源文件的单位原则：下面数值的单位一般都是标准单位，A,V,Ω
-LimitU的单位就是源文件里面获取的，LimitL的单位是LimitU的单位，LimitU的数值和LimitL的数值不变。
-一般源文件相关字段的数值90%以上都是在LimitL和LimitU数值区间内，可以这个确认转换逻辑。比如上限10，下限0，那么这个字段的数据都是0-10之间，那么这个字段的数据单位就是A，如果源文件里面是0.005，那么就转换为5。
-以下是具体的字段和单位
-1.IDSS1 的值- 有可能需要从安培(A)转换为纳安(nA)，乘以10^9
-2.IGSS2 的值- 有可能需要从安培(A)转换为纳安(nA)，乘以10^9
-3.IGSSR2 的值- 有可能需要从安培(A)转换为纳安(nA)，乘以10^9
-4.IDSS2 的值- 有可能需要从安培(A)转换为纳安(nA)，乘以10^9
-5.IDSS3 的值- 可能需要从安培(A)转换为微安(μA)，乘以10^6
-6.RDSON1的值- 有可能需要从欧姆(Ω)转换为毫欧(mΩ)，乘以1000
-7.VFSDS的值- 可能需要从伏特(V)转换为毫伏(mV)，乘以1000
-8.BVDSS1的值- 可能需要从伏特(V)转换为毫伏(mV)，乘以1000
-9.BVDSS2的值- 可能需要从伏特(V)转换为毫伏(mV)，乘以1000
-10.DELTABV的值- 可能需要从伏特(V)转换为毫伏(mV)，乘以1000
+要求：根据json表格中的字段进行转换，转换规则是测量值单位换算成参考值单位
+数据源文件的单位原则：下面测量数值的单位一般都是标准单位，A,V,Ω。参数的参考单位如json所示
+LimitU的单位就是源文件里面获取的，
+
+以下是log文件具体的字段和单位，只有这些单位需要换算。其他单位不需要
+{
+  "IGSS2": {
+    "reference_unit": "nA",
+    "measurement_unit": "A"
+  },
+  "IGSSR2": {
+    "reference_unit": "nA",
+    "measurement_unit": "A"
+  },
+  "IDSS2": {
+    "reference_unit": "uA",
+    "measurement_unit": "A"
+  },
+  "IGSS1": {
+    "reference_unit": "uA",
+    "measurement_unit": "A"
+  },
+  "IGSSR1": {
+    "reference_unit": "uA",
+    "measurement_unit": "A"
+  },
+  "IDSS1": {
+    "reference_unit": "uA",
+    "measurement_unit": "A"
+  },
+  "RDSON1": {
+    "reference_unit": "mOHM",
+    "measurement_unit": "ohm"
+  },
+  "IDSS3": {
+    "reference_unit": "uA",
+    "measurement_unit": "A"
+  }
+}
 
 
-其中源文件地址参考："E:\data\rawdata\NCEHSM650PBA_C127251.00@CP\NCEHSM650PBA_C127251.00@CP_001.log"
-文件结构{E:\data\rawdata，rawdata文件夹下有多个批次的文件夹，每个批次文件夹下有多个log文件}。
 ---------------------数据单位调整end---------------------
